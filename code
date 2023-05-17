@@ -1,0 +1,231 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define MAX_LEN 100
+const int MAX_SIZE = 100;
+#include <iostream>
+#include <fstream>
+#include "student.h"
+#define faster ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
+
+//sorting using selection sort
+int c1=0;
+template<class T>
+void selection_sort(T *stu, int n)
+// stu[] is the object array, n is the
+// number of objects in the array
+{
+    int pass, j, min;
+    //T temp;
+    for (pass = 0; pass <= n - 2; pass++)  // passes
+    {
+        min = pass;
+        for (j = pass + 1; j < n; j++){
+            // in each pass
+            c1++;
+            if ((stu[min] < stu[j]) < 0)
+                min = j;
+
+            T temp = stu[min];
+            stu[min] = stu[pass];
+            stu[pass] = temp;
+        }
+    }
+     ofstream fstream_ob;
+    fstream_ob.open("selection.txt", ios::out);
+    fstream_ob.write( (char *) & stu, sizeof(stu));
+
+}
+
+//merge sort
+//template<class T1>
+template<class T1>
+void merge_sort(T1 *a, int low, int high) {
+    int mid;
+    if (low < high) {
+        mid = low + (high - low) / 2;
+        //avoid overflow
+        merge_sort(a, low, mid);
+        merge_sort(a, mid + 1, high);
+        merge(a, low, mid, high);
+
+    }
+         ofstream fstream_ob;
+    fstream_ob.open("merge.txt", ios::out);
+    fstream_ob.write( (char *) & a, sizeof(a));
+
+}
+int c2=0;
+//template <class T1>
+//void merge(T1 *a, int, int, int);
+template<class T2>
+void merge(T2 *a[], int low, int mid, int high) {
+
+    int p1 = low;
+    int p2 = mid + 1;
+    Student **merged = (Student **) malloc(
+            sizeof(Student * ) * (high - low + 1));
+    int p = 0;
+    while (p1 < mid + 1 && p2 < high + 1) {
+        c2++;
+        if (a[p1]->getName() > a[p2]->getName()) {
+            merged[p] = a[p2];
+            p2++;
+        } else {
+            merged[p] = a[p1];
+            p1++;
+        }
+        p++;
+    }
+
+    while (p1 < mid + 1) {
+        merged[p++] = a[p1++];
+    }
+
+    while (p2 < high + 1)
+        merged[p++] = a[p2++];
+
+    for (int i = 0; i < (high - low + 1); i++) {
+        a[low + i] = merged[i];
+    }
+    free(merged);
+
+}
+//shell sort
+int c3=0;
+template<class T3>
+void shellSort(T3 *array, int n) {
+    // array=new Student[MAX_SIZE];
+    for (int interval = n / 2; interval > 0; interval /= 2) {
+        for (int i = interval; i < n; i += 1) {
+            c3++;
+            T3 temp = array[i];
+            int j;
+            for (j = i; j >= interval && array[j - interval].getName() > temp.getName(); j -= interval) {
+                array[j] = array[j - interval];
+            }
+            array[j] = temp;
+        }
+    }
+
+    ofstream fstream_ob;
+    fstream_ob.open("shell.txt", ios::out);
+    fstream_ob.write( (char *) & array, sizeof(array));
+
+}
+//binary search function
+int binarySearch(Student arr[],int n,string x)
+{
+    int left = 0 ;
+    int right = n - 1;
+    while (abs(left-right)>1)
+    {
+        int mid = left + (right - left) / 2;
+
+        if (x <= (arr[mid]).getName())
+            left=mid;
+        else
+            right=mid;
+    }
+    if(arr[left].getName()==x)
+        return left;
+
+    return -1;
+}
+int main() {
+    faster
+    Student *a1, *a2, *a3;
+    int n,ss;
+    string name_search;
+    char c;
+    string line;
+    cin>>c;
+    //cin.ignore();
+    // To read each line from code
+    int i = 0;
+    // Variable to keep count of each line
+    //  string arr[MAX_SIZE];  // array to store each line
+    ifstream mFile ("students.txt");
+    mFile.open("students.txt", ios::in);
+    if (mFile.is_open()) {
+        while (!mFile.eof()) {
+            // while (getline (mFile,line)){
+            cin >> n;
+            getline(mFile, line);
+            a1[i].setName(line);
+            a2[i].setName(line);
+            a3[i].setName(line);
+            a1[i].setId(line);
+            a2[i].setId(line);
+            a3[i].setId(line);
+            a1[i].setGpa(stod(line));
+            a2[i].setGpa(stod(line));
+            a3[i].setGpa(stod(line));
+            i++;
+        }
+        mFile.close();
+    }
+    else
+    {
+        cout << "Couldn't open the file\n";
+    }
+    selection_sort(a1, n);
+    //merge_sort(a2, 0, n-1);
+    shellSort(a3, n);
+
+    cout << "1-show number of comparisons and sorted array of selection sort"
+             << '\n';
+        cout << "2-show number of comparisons and sorted array of merge sort"
+             << '\n';
+        cout << "3-show number of comparisons and sorted array of shell sort"
+             << '\n';
+        cout << "4-search for a student by name" << '\n';
+        cout << "5-Exit"<<'\n';
+    //}
+
+    switch (c) {
+        case '1':{
+            cout << c1 << "\n";
+            for (int i = 0; i < n; ++i) {
+                a1[i].print();
+            }
+
+            break;
+        }
+        case'2':{
+            for (int i = 0; i <n ; ++i) {
+                cout<<c2<<'\n';
+                a2[i].print();
+            }
+            break;
+        }
+        case '3':{
+            cout << c3 << "\n";
+            for (int i = 0; i < n; ++i)
+            {
+                a3[i].print();
+            }
+            break;
+        }
+        case '4':
+        {
+            cin >> name_search;
+            ss = binarySearch(a1, n, name_search);
+            if (ss >= 0)
+                a1[ss].print();
+            else
+                cout << -1 << '\n';
+
+            break;
+        }
+        case '5':
+        {
+            break;
+        }
+    }
+
+    return 0;
+}
+
+
+
+
